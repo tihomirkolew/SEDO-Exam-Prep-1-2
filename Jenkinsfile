@@ -2,36 +2,26 @@ pipeline {
     agent any
 
     triggers {
-        pollSCM('H/5 * * * *') // Optional: Poll for changes every 5 minutes
+        pollSCM('H/5 * * * *')
     }
 
     stages {
-        stage('Checkout') {
-            steps {
-                // Clone the repository
-                checkout scm
-            }
-        }
-
         stage('Build') {
             steps {
-                // Build the application (adjust this command for your project)
-                sh 'npm install'
+                sh 'dotnet build'
             }
         }
 
         stage('Test') {
             steps {
-                // Run all tests (adjust this command for your project)
-                sh 'npm test'
+                sh 'dotnet test'
             }
         }
     }
 
     post {
         always {
-            // Archive test results or artifacts if needed
-            junit 'test-results/*.xml' // Adjust the path to your test results
+            junit 'test-results/*.xml'
         }
         success {
             echo 'Build and tests succeeded!'
